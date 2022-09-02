@@ -16,8 +16,15 @@ void task1() {
 }
 
 void task2()  {
-  String result = 'task 2 data';
-  print('Task 2 complete');
+  Duration fourSeconds = Duration(seconds: 4);
+  Future.delayed(fourSeconds, (){ //Creating an asynchronous method
+    String result = 'task 2 data';
+    print('Task 2 complete');
+  });
+
+  // sleep(fourSeconds);
+  // String result = 'task 2 data';
+  // print('Task 2 complete');
 }
 
 void task3() {
