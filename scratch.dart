@@ -35,3 +35,5 @@ void task3(String task2Data) {
   String result = 'task 3 data';
   print('Task 3 complete with $task2Data');
 }
+
+// Not used in the project but is a good reference for async and await
