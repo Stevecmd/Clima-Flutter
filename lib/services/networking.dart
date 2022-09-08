@@ -13,8 +13,8 @@ class NetworkHelper{
     // print(response.statusCode); //Get the status code for the connection to the open weather api
     if (response.statusCode == 200) { //200 means it successfully connected
       String data = response.body;
-      // print(data);
-      return jsonDecode(data);
+      // print(data); //prints the data received from OpenWeather
+      return jsonDecode(data); //jsonDecode comes with Flutter to automatically decode json data
     } else {
       print(response.statusCode);
     }

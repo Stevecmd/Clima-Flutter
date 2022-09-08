@@ -3,11 +3,12 @@ import 'dart:convert'; //deals with importing json weather data
 import 'package:flutter/material.dart';
 import 'package:clima/services/location.dart';
 import 'package:clima/services/networking.dart';
-import 'location_screen.dart';
+import 'package:clima/screens/location_screen.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart'; //for spinning loader
+import 'package:clima/services/weather.dart';
 
 
-const apiKey = '/*Put your API key here*/';
+const apiKey = '______________________'; //personal API key obtained from openweather.com to enable live weather updates
 
 class LoadingScreen extends StatefulWidget {
   @override
@@ -15,9 +16,6 @@ class LoadingScreen extends StatefulWidget {
 }
 
 class _LoadingScreenState extends State<LoadingScreen> {
-
-  double longitude;
-  double latitude;
 
   @override
   void initState() {
@@ -28,15 +26,15 @@ class _LoadingScreenState extends State<LoadingScreen> {
   void getLocationData() async{ //async means this process happens independently of anything else that is happening
     Location location = Location();
     await location.getCurrentPosition(); //await enables us access to latitude and longitude from location.dart
-    latitude = location.latitude;
-    longitude = location.longitude;
+    // latitude = location.latitude; //saving the latitude and longitude into usable variables
+    // longitude = location.longitude;
 
-    NetworkHelper networkHelper = NetworkHelper('https://api.openweathermap.org/data/2.5/weather?lat=$latitude&lon=$longitude&appid=$apiKey');
-
-    var weatherData = await networkHelper.getData();
+    NetworkHelper networkHelper = NetworkHelper('https://api.openweathermap.org/data/2.5/weather?lat=${location.latitude}&lon=${location.longitude}&appid=$apiKey&units=metric'); //units specifies celcius or fahrenheit
+    //$latitude and $longitude come from the geo locator
+    var weatherData = await networkHelper.getData(); //Tapping into the weather data we get back for use elsewhere
 
     Navigator.push(context, MaterialPageRoute(builder: (context){
-      return LocationScreen();
+      return LocationScreen(locationWeather: weatherData,); //to display location screen we should have imported it
     }));
   }
 
