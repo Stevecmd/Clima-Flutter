@@ -1,6 +1,7 @@
 import 'package:clima/services/weather.dart';
 import 'package:flutter/material.dart';
 import 'package:clima/utilities/constants.dart';
+import 'city_screen.dart';
 
 class LocationScreen extends StatefulWidget {
 
@@ -28,6 +29,13 @@ class _LocationScreenState extends State<LocationScreen> {
 
   void updateUI(dynamic weatherData){
      setState(() { //To update the widget based on the updated state of the info below we need to use setState
+       if (weatherData == null){
+         temperature = 0;
+         weatherIcon = 'Error';
+         weatherMessage = 'Unable to get Location data.';
+         cityName = '';
+         return;
+       }
      double temp = weatherData['main']['temp'];
      temperature = temp.toInt();
      var condition = weatherData['weather'][0]['id'];
@@ -60,14 +68,29 @@ class _LocationScreenState extends State<LocationScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      var weatherData = await weather.getLocationWeather();
+                      updateUI(weatherData);
+                    },
                     child: Icon(
                       Icons.near_me,
                       size: 50.0,
                     ),
                   ),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () async{
+                      // Navigate to the second screen using a named route.
+                      // typedName takes the value cityName from city_screen
+                      var typedName = await Navigator.push(context, MaterialPageRoute(builder: (context){
+                        return CityScreen();
+                      },
+                      ),
+                      );
+                      if (typedName != null){
+                        var weatherData = await weather.getCityWeather(typedName);
+                        updateUI(weatherData);
+                      }
+                    },
                     child: Icon(
                       Icons.location_city,
                       size: 50.0,
@@ -105,6 +128,4 @@ class _LocationScreenState extends State<LocationScreen> {
     );
   }
 }
-
-
 

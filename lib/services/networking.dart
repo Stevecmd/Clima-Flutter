@@ -19,5 +19,4 @@ class NetworkHelper{
       print(response.statusCode);
     }
   }
-
 }
